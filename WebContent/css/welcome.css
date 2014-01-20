@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+
+ul{
+	overflow:hidden;
+	white-space:nowrap;
+}
+
+li{
+	display:inline;
+}

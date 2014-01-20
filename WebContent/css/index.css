@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+
+body{
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position: center bottom;
+	background-color: #EEEEEE;
+}
+
