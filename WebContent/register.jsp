@@ -1,16 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page session="true" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
-<%
-		response.setHeader("Pragma","no-cache");  
-		response.setHeader("Cache-Control","no-store");  
-		response.setHeader("Expires","0");  
-		response.setDateHeader("Expires",-1); 
-%>
-
+<script type="text/javascript" src="js/jquery-2.0.3.js"></script>
 <script >
 function checkPwd(){
 
@@ -23,6 +18,14 @@ function checkPwd(){
 		
 	}
 }
+
+$(document).ready(function(){
+	   setTimeout(function(){
+	  $("div.message").fadeOut("slow", function () {
+	  	$("div.message").remove();
+	      });
+	}, 1000);
+	   });
 </script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -81,11 +84,28 @@ function checkPwd(){
 						<input type="reset" value="Reset">
 						<input type="button" value="Back" onclick="window.location='index.jsp';"></center></td>
 </tr>
-
 </table>
-
 </form>
-
+<div id="message" class="message"> 
+<c:set var="flag" scope="request" value="${requestScope.flag}"/>
+<c:choose>
+    <c:when test="${flag == 'uname'}">
+       Username already exists !! 
+    </c:when>
+    <c:when test="${flag == 'email'}">
+       Email already exists !! 
+    </c:when>
+    <c:when test="${flag == 'mno'}">
+       Mobile number already exists !!
+    </c:when>
+    <c:when test="${flag == 'mismatch'}">
+       Password and confirm password are mismatched !!
+    </c:when>
+    <c:when test="${flag == 'fail'}">
+       <script> alert('Registration Failed !!'); </script>
+    </c:when>
+</c:choose>  
+</div>
 </center>
 </body>
 </html>

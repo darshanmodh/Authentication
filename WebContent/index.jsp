@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.sql.*"%>
+<%@ page session="true" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -30,33 +32,32 @@
 <tr>
 	<td> Password </td> <td> <input type="password" name="pass" placeholder="Enter Password" required="required"> </td>
 </tr>
-
+<c:set var="user" scope="session" value="${sessionScope.user}"/>
+<c:if test="${user != null}">
+   <c:redirect url="welcome.jsp"/>
+</c:if>
 <tr>
 	<td colspan="2"> <center> <input type="submit" value="Sign In" name="submit"> 
 	<input type="button" value="New User ?" onclick="window.location='register.jsp';"></center> </td>
 </tr>
-
-</table>  
-
-<%
-
-HttpSession sessions = request.getSession();
-String userName = (String) sessions.getAttribute("uname");	
-
-if( userName != null) {
-	response.sendRedirect("welcome.jsp");
-} 
-
-String flag = (String) request.getAttribute("flag");
-if( flag == "false" ) {
-	%> <div id="message" class="message"> Invalid Username or Password !! </div> <%
-} else if ( flag ==  "unlink") {
-	%> <div id="message" class="message"> Your Account is unlinked, To Re-Login you must have to Register again !! </div> <%
-} else if ( flag ==  "logout") {
-	%> <div id="message" class="message"> You are Logged out !! </div> <%
-}
-
-%>
+</table>
+<div id="message" class="message"> 
+<c:set var="flag" scope="request" value="${requestScope.flag}"/>
+<c:choose>
+	<c:when test="${flag == 'unlink'}">
+       Your Account is unlinked, To Re-Login you must have to Register again !! 
+    </c:when>
+    <c:when test="${flag == 'false'}">
+       Invalid Username or Password !! 
+    </c:when>
+    <c:when test="${flag == 'logout'}">
+       You are Logged out !! 
+    </c:when>
+    <c:when test="${flag == 'success'}">
+       You have registered successfully !!
+    </c:when>
+</c:choose>  
+</div>
 </center>
 </form>
 </body>

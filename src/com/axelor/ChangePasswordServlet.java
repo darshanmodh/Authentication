@@ -58,7 +58,7 @@ public class ChangePasswordServlet extends HttpServlet {
 		
 		try {
 			dbPass = user.getPassword();
-			connect = Test.connect();
+			connect = DAO.connect();
 			statement = connect.createStatement();	
 			
 			if ( oldPassword.equalsIgnoreCase(dbPass)) {				 

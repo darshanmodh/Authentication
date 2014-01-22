@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page session="true" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
 <script >
 function checkPwd(){
 
@@ -17,9 +18,6 @@ function checkPwd(){
 	}
 }
 </script>
-
-
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Change Password</title>
 </head>
@@ -56,21 +54,20 @@ function checkPwd(){
 
 </form>
 
-
-<%
-		
-		String flag = (String) request.getAttribute("flag");
-		if( flag == "success" ) {
-			out.print(" Your password has been changed !! ");
-		} else if ( flag ==  "owrong") {
-			out.print(" Your Old Password is wrong !!");
-		} else if ( flag ==  "mismatch") {
-			out.print(" New password & confirm Password are Mismatch !!");
-		}
-
-
-%>
-
+<div id="message" class="message"> 
+<c:set var="flag" scope="request" value="${requestScope.flag}"/>
+<c:choose>
+    <c:when test="${flag == 'success'}">
+       Your password has been changed !!
+    </c:when>
+    <c:when test="${flag == 'owrong'}">
+       Your Old Password is wrong !! 
+    </c:when>
+    <c:when test="${flag == 'mismatch'}">
+       New password & confirm Password are Mismatch !!
+    </c:when>
+</c:choose>  
+</div>
 </center>
 </body>
 </html>

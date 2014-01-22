@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -49,52 +51,33 @@ public class EditProfileServlet extends HttpServlet {
 		user.setMobile( request.getParameter("mno") );
 		user.setBirthDate( request.getParameter("bdate") );
 		
-		PrintWriter out = response.getWriter();
-		Statement statement = null;
-		String sql;
-		
 		response.setContentType("text/html");
+		ServletContext context = getServletContext();
+   	 	RequestDispatcher rd = context.getRequestDispatcher("/edit.jsp");
 				
 		try {
-	    	 Connection connect = Test.connect();	    	 
-	         connect.setAutoCommit(false);
-	         statement = connect.createStatement();
-	         sql = "UPDATE users SET email=' ', mno=' ' where uname='" + user.getUserName() + "';";
-           	 int rows = statement.executeUpdate(sql);
-           	 statement.close();
-          	 connect.commit();
-           	 
-	         statement = connect.createStatement();
-	         
-           	 
-	         if ( Test.checkEmail( user.getEmail() ) ) {
-	        	 out.println("Email allready Exist !!.");
-		         out.println("<a href='edit.jsp'>Editing Again...</a>");
-	         } else if ( Test.checkMobile( user.getMobile() ) ) {
-	        	 out.println("Mobile No. allready Exist !!.");
-		         out.println("<a href='edit.jsp'>Editing Again...</a>");
+			 DAO.updateME(user);
+			 
+	         if ( DAO.check( "email", user.getEmail() ) ) {
+	        	 request.setAttribute("flag", "email");
+	         } else if ( DAO.check( "mno", user.getMobile() ) ) {
+	        	 request.setAttribute("flag", "mno");
 	         } else {
-	          	 sql = "UPDATE users SET name='" + user.getName() + "', city= '" + user.getCity() + "', email='" + user.getEmail() + "', mno='" + user.getMobile() + "', bdate='" + user.getBirthDate() + "' where uname='" + user.getUserName() + "';";
-	           	 rows = statement.executeUpdate(sql);
-	           	 statement.close();
-	           	 connect.commit();
-	           	 connect.close();
-	           	 
+	          	 int rows = DAO.update(user);
 	        	 HttpSession session = request.getSession();
 	        	 session.setAttribute("user", user);;	
-	           	 
 	           	 if( rows > 0) {
-	           		 response.sendRedirect("welcome.jsp");
+	           		rd = context.getRequestDispatcher("/welcome.jsp");
+	           		request.setAttribute("flag", "success");
 	           	 } else {
-	           		out.println("Editing Failed...");
-	           		 out.println("<a href='edit.jsp'>Edit Again...</a>");
+	           		request.setAttribute("flag", "fail");
 	           	 }
 	         }
+	         rd.forward(request, response);
 	      } catch (Exception e) {
-	    	 out.println("Editing Failed.");
-	    	 out.println("<a href='edit.jsp'>Edit Again...</a>");
-	         System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-	         System.exit(0);
+	    	  request.setAttribute("flag", "fail");
+	          System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+	          System.exit(0);
 	      }	
 	}
 

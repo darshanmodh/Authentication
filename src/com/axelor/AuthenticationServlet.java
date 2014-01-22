@@ -50,54 +50,18 @@ public class AuthenticationServlet extends HttpServlet {
 		String password = request.getParameter("pass");
 		String dbPassword = null;
 		
-		/*String name = null;
-		String city = null;
-		String birthDate = null;
-		String mobile = null;
-		String email = null;*/
-		
-		
 		response.setContentType("text/html");
 	      try {
-	    	 Connection connect = Test.connect();
-	         connect.setAutoCommit(false);
-	         statement = connect.createStatement();
-	         ResultSet resultSet = statement.executeQuery( "SELECT * FROM users WHERE uname = '" + userName + "';");
-	         
-	         while ( resultSet.next() ) {
-	        	//dbPassword = resultSet.getString("pass");
-	        	user.setUserName( resultSet.getString("uname") );
-	        	user.setPassword( resultSet.getString("pass") );
-	        	user.setName( resultSet.getString("name") );
-	        	user.setCity( resultSet.getString("city") );
-	        	user.setEmail( resultSet.getString("email") );
-	        	user.setMobile( resultSet.getString("mno") );
-	        	user.setBirthDate( resultSet.getString("bdate") );
-	         }
-	         
-	         resultSet.close();
-	         statement.close();
-	         connect.commit();
-	         connect.close();
-	         
+	    	 user = DAO.retrive(userName);
 	         if ( password.equals( user.getPassword() ) ) {
 	        	 HttpSession session = request.getSession();
 	        	 session.setAttribute("user", user);
-	        	 /*session.setAttribute("uname",userName);
-	        	 session.setAttribute("pass", dbPassword);
-	        	 session.setAttribute("bdate",birthDate);
-	        	 session.setAttribute("name",name);
-	        	 session.setAttribute("city",city);
-	        	 session.setAttribute("email",email);
-	        	 session.setAttribute("mno",mobile);*/	        	 
 	        	 response.sendRedirect("welcome.jsp");
 	         } else {
-	        	 //out.println("<script>alert('Username or Password incorrect.');</script>");
 	        	 ServletContext context = getServletContext();
 	        	 RequestDispatcher rd = context.getRequestDispatcher("/index.jsp");
 	        	 request.setAttribute("flag", "false");
 	        	 rd.forward(request, response);
-	        	// response.sendRedirect("index.jsp?flag=false");
 	         }
 	         
 	      } catch (Exception e) {

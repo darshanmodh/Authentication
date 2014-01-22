@@ -36,26 +36,27 @@ public class UnlinkServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 			
 		try {
+			response.setContentType("text/html");
+			PrintWriter out = response.getWriter();
 			Statement statement;
 			String sql = null;
-			Connection connect = Test.connect();	    	 
+			Connection connect = DAO.connect();	    	 
 	        connect.setAutoCommit(false);
 	        statement = connect.createStatement();
 	        HttpSession session = request.getSession();
 	        User user = (User)session.getAttribute("user");
 	        
-          	 sql = "DELETE FROM users where uname='" + user.getUserName() + "';";
-           	 int rows = statement.executeUpdate(sql);
-           	 statement.close();
-           	 connect.commit();
-           	 connect.close();
-           	 session.invalidate();
+	      	sql = "DELETE FROM users where uname='" + user.getUserName() + "';";
+	       	statement.executeUpdate(sql);
+	       	session.invalidate();
+	       	connect.commit();
+	       	statement.close();
+	       	connect.close();
            	 
            	ServletContext context = getServletContext();
-           	RequestDispatcher rd = context.getRequestDispatcher("/index.jsp");
-           	request.setAttribute("flag", "unlink");
-           	rd.forward(request, response);
-           	
+	       	RequestDispatcher rd = context.getRequestDispatcher("/index.jsp");
+	       	request.setAttribute("flag", "unlink");
+	       	rd.forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
