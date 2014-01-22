@@ -1,5 +1,5 @@
 <%@ page import="java.sql.*"%>
-<%@ page import="com.axelor.*" %>
+<%@ page import="com.axelor.controller.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page session="true" %>
@@ -44,6 +44,7 @@
 <a href="logout"><img src="images/logout.jpeg" width="50" height="50" title="Logout"></a></div>
 <div><img src="images/profile.png" width="100" height="100" title="profile picture"></div>
 <center>
+<h3>Employee's Information</h3>
 <table border="1" cellspacing="5" cellpadding="5">
 <tr>
 <th> Name </th>
