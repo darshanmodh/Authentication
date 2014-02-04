@@ -21,7 +21,7 @@
 		$( document ).tooltip({
 		track: true
 		});
-		});
+		});	
 		
 		$(document).ready(function(){
 			   setTimeout(function(){
@@ -38,6 +38,7 @@
 <p>
 <div id="bloc1"> Welcome, ${user.getUserName()} </div>
 <div id="bloc2">
+<a href="showalluser.jsp" ><img src="images/showusers.jpg" width="50" height="50" title="Show All Users"></a>
 <a href="edit.jsp" ><img src="images/edit.jpeg" width="50" height="50" title="Edit Profile"></a> 
 <a href="changepass.jsp"><img src="images/change-password.png" width="50" height="50" title="Change Password"></a>
 <a href="unlink"><img src="images/close.jpg" width="50" height="50" title="Unlink your Account"></a>

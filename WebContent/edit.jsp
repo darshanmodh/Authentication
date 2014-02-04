@@ -42,7 +42,7 @@ $(document).ready(function(){
 
 <tr>
 <td>City</td>
-<td><input type="text" value=${ user.getCity() }  name="city" placeholder="Enter your city"> </td>
+<td><input type="text"   name="city" placeholder="Enter your city" value=${ user.getCity() }> </td>
 </tr>
 
 <tr>

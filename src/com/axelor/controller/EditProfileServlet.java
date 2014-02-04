@@ -53,29 +53,24 @@ public class EditProfileServlet extends HttpServlet {
 		user.setEmail( request.getParameter("email") );
 		user.setMobile( request.getParameter("mno") );
 		user.setBirthDate( request.getParameter("bdate") );
-		
+		DAO dao = new DAO();
+			
 		response.setContentType("text/html");
 		ServletContext context = getServletContext();
    	 	RequestDispatcher rd = context.getRequestDispatcher("/edit.jsp");
 				
 		try {
-			 DAO.updateME(user);
-			 
-	         if ( DAO.check( "email", user.getEmail() ) ) {
-	        	 request.setAttribute("flag", "email");
-	         } else if ( DAO.check( "mno", user.getMobile() ) ) {
-	        	 request.setAttribute("flag", "mno");
-	         } else {
-	          	 int rows = DAO.update(user);
+			  	 int rows = dao.update(user);
 	        	 HttpSession session = request.getSession();
-	        	 session.setAttribute("user", user);;	
+	        	 session.setAttribute("allUserList", dao.setAllUser() );
+	        	 session.setAttribute("user", user);
 	           	 if( rows > 0) {
 	           		rd = context.getRequestDispatcher("/welcome.jsp");
 	           		request.setAttribute("flag", "success");
 	           	 } else {
 	           		request.setAttribute("flag", "fail");
 	           	 }
-	         }
+	      
 	         rd.forward(request, response);
 	      } catch (Exception e) {
 	    	  request.setAttribute("flag", "fail");

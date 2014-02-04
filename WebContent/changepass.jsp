@@ -5,7 +5,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<script >
+<script type="text/javascript" src="js/jquery-2.0.3.js"></script>
+<script>
+$(document).ready(function(){
+	   setTimeout(function(){
+	  $("div.message").fadeOut("slow", function () {
+	  	$("div.message").remove();
+	      });
+	}, 1000);
+	 });
+	 
 function checkPwd(){
 
 	var pass = document.getElementById("pass").value;
@@ -16,7 +25,7 @@ function checkPwd(){
 		//alert(" Password are Mismatch !!! ");
 		
 	}
-}
+}	 
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Change Password</title>

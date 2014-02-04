@@ -69,17 +69,12 @@ public class RegisterUserServlet extends HttpServlet {
 		
    	 	if ( password.equals( confirmPassword ) ) {
    	 		try {
-		    	 Connection connect = DAO.connect();
-		         Statement statement = connect.createStatement();
-		         
-		         if( DAO.check( "uname", user.getUserName() ) ) {	 
+   	 		System.out.println("11111111");
+		         if( new DAO().check( "userName", user.getUserName() ) ) {	
+		        	 System.out.println("first");
 		        	 request.setAttribute("flag", "uname");
-		         } else if ( DAO.check("email", user.getEmail() ) ) {
-		        	 request.setAttribute("flag", "email");
-		         } else if ( DAO.check( "mno", user.getMobile() ) ) {
-		        	 request.setAttribute("flag", "mno");
 		         } else {
-		        	 DAO.insert(user);
+		        	 new DAO().insert(user);
 		        	 rd = context.getRequestDispatcher("/index.jsp");
 		        	 request.setAttribute("flag", "success");
 		        	 }

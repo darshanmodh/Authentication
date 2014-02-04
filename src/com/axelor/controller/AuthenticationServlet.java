@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -52,13 +54,24 @@ public class AuthenticationServlet extends HttpServlet {
 		String userName = request.getParameter("uname");
 		String password = request.getParameter("pass");
 		String dbPassword = null;
+		DAO dao = new DAO();
 		
 		response.setContentType("text/html");
 	      try {
-	    	 user = DAO.retrive(userName);
+	    	 user = dao.retrive(userName);
+	    	 
 	         if ( password.equals( user.getPassword() ) ) {
 	        	 HttpSession session = request.getSession();
 	        	 session.setAttribute("user", user);
+	        	 session.setAttribute("allUserList", dao.setAllUser() );
+	        	 List<User> lst = dao.setAllUser();
+	        	 Iterator<User> it = lst.iterator();
+	        	 
+	        	 while(it.hasNext()) {
+	        		 System.out.println(" " + it.next().getUserName());
+	        	 }
+	        	 
+	        	 
 	        	 response.sendRedirect("welcome.jsp");
 	         } else {
 	        	 ServletContext context = getServletContext();

@@ -48,54 +48,40 @@ public class ChangePasswordServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
+		DAO dao  = new DAO();
+		
 		User user = (User) request.getSession().getAttribute("user");
 		String newPassword = request.getParameter("pass");
 		String confirmPassword = request.getParameter("cpass");
 		String oldPassword = request.getParameter("opass");
 		String dbPass = null;
-		Statement statement = null;
-		String sql;
-		Connection connect = null;
+		
 		ServletContext context = getServletContext();
        	RequestDispatcher rd = context.getRequestDispatcher("/changepass.jsp");
 		
 		try {
-			dbPass = user.getPassword();
-			connect = DAO.connect();
-			statement = connect.createStatement();	
+			dbPass = dao.getDbPassword( user.getUserName() );
 			
-			if ( oldPassword.equalsIgnoreCase(dbPass)) {				 
+			if ( oldPassword.equalsIgnoreCase(dbPass) ) {				 
 	           	if ( newPassword.equals(confirmPassword) ) {
-	           		 sql = "UPDATE users SET pass='" + newPassword + "' where uname='" + user.getUserName() + "';";
-		        	 statement.executeUpdate(sql);
-		           	 request.setAttribute("flag", "success");
-		           	 HttpSession session = request.getSession();
-		           	 session.setAttribute("user", user);
+	           		 
+	           		boolean ans = dao.changePass(user, newPassword);
+	           		
+	           		request.setAttribute("flag", "success");
+		           	HttpSession session = request.getSession();
+		           	session.setAttribute("user", user);
+		           	
 				} else {
 		           	request.setAttribute("flag", "mismatch");
 				}
-	           	
 			} else {
 	           	request.setAttribute("flag", "owrong");
 			}
-				
 			rd.forward(request, response);
 		} catch (Exception e) {
 	    	 System.err.println( e.getClass().getName()+": "+ e.getMessage() );
 	         System.exit(0);
-		} finally {
-			try {
-				 statement.close();
-				 connect.commit();
-		         connect.close();
-		       
-		         
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	        
-		}
+		} 
 	}
 
 }

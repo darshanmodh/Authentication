@@ -37,30 +37,19 @@ public class UnlinkServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-			
-		try {
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			Statement statement;
-			String sql = null;
-			Connection connect = DAO.connect();	    	 
-	        connect.setAutoCommit(false);
-	        statement = connect.createStatement();
-	        HttpSession session = request.getSession();
+		
+		DAO dao = new DAO();			
+		try {			
+			HttpSession session = request.getSession();
 	        User user = (User)session.getAttribute("user");
-	        
-	      	sql = "DELETE FROM users where uname='" + user.getUserName() + "';";
-	       	statement.executeUpdate(sql);
-	       	session.invalidate();
-	       	connect.commit();
-	       	statement.close();
-	       	connect.close();
-           	 
-           	ServletContext context = getServletContext();
+	        boolean rows = dao.unlink(user);
+	        session.invalidate();
+	        ServletContext context = getServletContext();
 	       	RequestDispatcher rd = context.getRequestDispatcher("/index.jsp");
 	       	request.setAttribute("flag", "unlink");
+	       	
 	       	rd.forward(request, response);
-		} catch (Exception e) {
+	     } catch (Exception e) {
 			e.printStackTrace();
 		}
 		
